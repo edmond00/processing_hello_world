@@ -1,0 +1,2 @@
+Main-Class: gmtk.Game
+Class-Path: jar/core.jar jar/minim.jar jar/jsminim.jar jar/mp3spi1.9.5.jar jar/jl1.0.1.jar jar/tritonus_aos.jar jar/tritonus_share.jar
