@@ -38,6 +38,8 @@ public class ImageBank {
 	}
 
 	void draw(String key, int x, int y) {
+		x = (int)((double)x*resize);
+		y = (int)((double)y*resize);
 		PGraphics img =  bank.get(key);
 		int rw = (int)(((double)img.width)*this.resize);
 		int rh = (int)(((double)img.height)*this.resize);
