@@ -1,4 +1,4 @@
-package gmtk;
+package game;
 
 import java.util.Hashtable;
 import processing.core.*;

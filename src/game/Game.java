@@ -1,4 +1,4 @@
-package gmtk;
+package game;
 
 import processing.core.*;
 import ddf.minim.*;
@@ -13,7 +13,7 @@ public class Game extends PApplet{
 		static Game app = null;
 
 		public static void main(String[] args) {
-			PApplet.main("gmtk.Game");
+			PApplet.main("game.Game");
 		}
 
 		public void settings(){

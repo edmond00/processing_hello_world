@@ -1,21 +1,19 @@
 NAME= game
-SRC_NAME= Game.java\
-		  Keyboard.java\
-		  SoundBank.java
+MAIN_CLASS= game.Game
 PROCESSING= .:jar/core.jar:.:jar/minim.jar:.:jar/jsminim.jar:.:jar/mp3spi1.9.5.jar:.:jar/jl1.0.1.jar:.:jar/tritonus_share.jar:.:jar/tritonus_aos.jar
 MANIFEST= MANIFEST.MF
 JARNAME= launch.jar
 JARDIR= jar
 DATADIR= data
 ZIP= game.zip
-PACKAGE= gmtk/
+PACKAGE= game/
 SRC_DIR= ./src/
-SRC_PATH= $(addprefix $(SRC_DIR), $(PACKAGE))
+rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+SRC= $(call rwildcard, $(SRC_DIR), *.java)
+SRC_NAME= $(SRC:$(SRC_DIR)%=%)
 OBJ_DIR= ./class/
-OBJ_PATH= $(addprefix $(OBJ_DIR), $(PACKAGE))
 OBJ_NAME= $(SRC_NAME:.java=.class)
-SRC= $(addprefix $(SRC_PATH), $(SRC_NAME))
-OBJ= $(addprefix $(OBJ_PATH), $(OBJ_NAME))
+OBJ= $(addprefix $(OBJ_DIR), $(OBJ_NAME))
 
 .PHONY: all
 all: jar
