@@ -1,9 +1,12 @@
 package game;
 
+import iso.AppInterface;
+//import iso.IsoInterface;
+//import iso.IsoEngine;
 import processing.core.*;
 import ddf.minim.*;
 
-public class Game extends PApplet{
+public class Game extends PApplet implements AppInterface {
 
 		int x = 180;
 		int y = 180;
@@ -11,7 +14,15 @@ public class Game extends PApplet{
 		Minim minim;
 		SoundBank sound;
 		ImageBank img;
+
+//		IsoInterface iso = null;
+
 		static Game app = null;
+
+		public void draw(String img, int x, int y) {
+			this.img.draw(img, x, y);
+		}
+
 
 		public static void main(String[] args) {
 			PApplet.main("game.Game");
@@ -25,6 +36,7 @@ public class Game extends PApplet{
 		public void setup(){
 			Game.app = this;
 			Game.app.log("setup");
+//			iso = new IsoEngine(this, width/2, height/2);
 			minim = new Minim(this);
 			sound = new SoundBank();
 			img = new ImageBank(5.0);
@@ -41,7 +53,8 @@ public class Game extends PApplet{
 			background(10,0,10);
 			fill(120,50,240);
 			rect(x, y, 40, 40);
-			img.draw("floor", 200, 200);
+			//img.draw("floor", 200, 200);
+//			iso.draw();
 			if (keyboard.isPressed((int)' ')) {
 				fill(255, 255, 255);
 				textSize(30);
