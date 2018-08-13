@@ -6,7 +6,6 @@ JARNAME= launch.jar
 JARDIR= jar
 DATADIR= data
 ZIP= game.zip
-PACKAGE= game/
 SRC_DIR= ./src/
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 SRC= $(call rwildcard, $(SRC_DIR), *.java)
@@ -46,7 +45,7 @@ jar: $(JARNAME)
 
 $(JARNAME): $(OBJ)
 	@printf "[ \033[34mjar\033[0m ]\n"
-	@jar cvmf MANIFEST.MF $(JARNAME) -C $(OBJ_DIR) $(PACKAGE)
+	@jar cvmf MANIFEST.MF $(JARNAME) -C $(OBJ_DIR) .
 
 .PHONY: run
 run: jar
