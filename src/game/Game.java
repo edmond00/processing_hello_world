@@ -10,6 +10,7 @@ public class Game extends PApplet{
 		Keyboard keyboard;
 		Minim minim;
 		SoundBank sound;
+		ImageBank img;
 		static Game app = null;
 
 		public static void main(String[] args) {
@@ -17,7 +18,8 @@ public class Game extends PApplet{
 		}
 
 		public void settings(){
-			size(400, 400);
+			size(800, 800);
+			noSmooth();
 		}
 
 		public void setup(){
@@ -25,8 +27,9 @@ public class Game extends PApplet{
 			Game.app.log("setup");
 			minim = new Minim(this);
 			sound = new SoundBank();
+			img = new ImageBank(5.0);
 			keyboard = new Keyboard();
-			surface.setResizable(true);
+			//surface.setResizable(true);
 			PFont font = loadFont("./data/font/Consolas-48.vlw");
 			textFont(font);
 			textAlign(CENTER, CENTER);
@@ -35,9 +38,10 @@ public class Game extends PApplet{
 		public void draw(){
 			control();
 			keyboard.update();
-			background(0);
+			background(10,0,10);
 			fill(120,50,240);
 			rect(x, y, 40, 40);
+			img.draw("floor", 200, 200);
 			if (keyboard.isPressed((int)' ')) {
 				fill(255, 255, 255);
 				textSize(30);
