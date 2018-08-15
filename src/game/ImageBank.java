@@ -2,7 +2,7 @@ package game;
 
 import java.util.Hashtable;
 import processing.core.*;
-import ddf.minim.*;
+import tools.*;
 
 public class ImageBank {
 	
@@ -38,13 +38,20 @@ public class ImageBank {
 	}
 
 	void draw(String key, int x, int y) {
+		draw(key, x, y, 0, 0, -1, -1);
+	}
+	void draw(String key, int x, int y, int rx, int ry, int rw, int rh) {
+		PGraphics img =  bank.get(key);
+		if (rw == -1)
+			rw = img.width;
+		if (rh == -1)
+			rh = img.height;
 		x = (int)((double)x*resize);
 		y = (int)((double)y*resize);
-		PGraphics img =  bank.get(key);
-		int rw = (int)(((double)img.width)*this.resize);
-		int rh = (int)(((double)img.height)*this.resize);
+		int w = (int)(((double)rw)*this.resize);
+		int h = (int)(((double)rh)*this.resize);
 		Game.app.noSmooth();
-		Game.app.image(img, x, y, rw, rh);
+		Game.app.image(img, x, y, w, h, rx, ry, rx+rw, ry+rh);
 	}
 }
 

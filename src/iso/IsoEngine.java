@@ -3,6 +3,7 @@ package iso;
 public class IsoEngine implements IsoInterface {
 
 	AppInterface app;
+	Avatar avatar;
 	IsoMap map;
 	static IsoEngine self = null;
 	int centerX;
@@ -17,16 +18,40 @@ public class IsoEngine implements IsoInterface {
 		this.centerY = centerY;
 
 		this.map = new IsoMap(
-			4, 5, 5,
-			"wallLeft",
-			"wallRight",
+			5, 6,
+			"leftWall",
+			"rightWall",
 			"floor"
 		);
 		for (int w = 0; w < this.map.width; w++) {
-			for (int d = 0; d < this.map.depth; d++) {
-				this.map.map[1][w][d] = true;
+			this.map.map[w][0] = -1;
+			for (int d = 1; d < this.map.depth; d++) {
+				this.map.map[w][d] = 0;
 			}
 		}
+		this.map.map[0][5] = 3;
+		this.map.map[2][0] = 0;
+		this.avatar = new Avatar(map, 2, 0);
+	}
+
+	public void left() {
+		avatar.moveLeftFront();
+	}
+
+	public void right() {
+		avatar.moveRightBack();
+	}
+
+	public void up() {
+		avatar.moveLeftBack();
+	}
+
+	public void down() {
+		avatar.moveRightFront();
+	}
+
+	public void update() {
+		map.update();
 	}
 
 	public void draw() {

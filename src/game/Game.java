@@ -14,6 +14,10 @@ public class Game extends PApplet implements AppInterface {
 		Minim minim;
 		SoundBank sound;
 		ImageBank img;
+		AnimBank anim;
+
+		int step = 0;
+		int lastUpdate = 0;
 
 		IsoInterface iso = null;
 
@@ -21,6 +25,10 @@ public class Game extends PApplet implements AppInterface {
 
 		public void draw(String img, int x, int y) {
 			this.img.draw(img, x, y);
+		}
+
+		public void draw(String img, int step, int x, int y) {
+			this.anim.draw(img, step, x, y);
 		}
 
 
@@ -35,13 +43,14 @@ public class Game extends PApplet implements AppInterface {
 
 
 		public void setup(){
-			double resize = 5.0;
+			double resize = 3.0;
 			Game.app = this;
 			Game.app.log("setup");
 			iso = new IsoEngine(this, width/(2*(int)resize), height/(2*(int)resize));
 			minim = new Minim(this);
 			sound = new SoundBank();
 			img = new ImageBank(resize);
+			anim = new AnimBank();
 			keyboard = new Keyboard();
 			//surface.setResizable(true);
 			PFont font = loadFont("./data/font/Consolas-48.vlw");
@@ -49,18 +58,20 @@ public class Game extends PApplet implements AppInterface {
 			textAlign(CENTER, CENTER);
 		}
 
+		public int getStep() {
+			return step;
+		}
+
 		public void draw(){
-			control();
-			keyboard.update();
-			background(10,0,10);
-			fill(120,50,240);
-			rect(x, y, 40, 40);
-			//img.draw("floor", 200, 200);
-			iso.draw();
-			if (keyboard.isPressed((int)' ')) {
-				fill(255, 255, 255);
-				textSize(30);
-				text("Hello", x+20, y+20);
+			int now = millis();
+			if (now - lastUpdate > 30) {
+				lastUpdate = now;
+				step += 1;
+				control();
+				keyboard.update();
+				iso.update();
+				background(10,0,10);
+				iso.draw();
 			}
 		}
 		
@@ -84,16 +95,12 @@ public class Game extends PApplet implements AppInterface {
 
 		void control() {
 			if (keyboard.isPressed(LEFT))
-				x -= 5;
+				iso.left();
 			if (keyboard.isPressed(RIGHT))
-				x += 5;
+				iso.right();
 			if (keyboard.isPressed(UP))
-				y -= 5;
+				iso.up();
 			if (keyboard.isPressed(DOWN))
-				y += 5;
-			if (keyboard.isPress((int)' '))
-				sound.play("bip");
-			if (keyboard.isRelease((int)' '))
-				sound.play("bip");
+				iso.down();
 		}
 }
