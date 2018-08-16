@@ -18,20 +18,37 @@ public class IsoEngine implements IsoInterface {
 		this.centerY = centerY;
 
 		this.map = new IsoMap(
-			5, 6,
+			8, 7,
 			"leftWall",
 			"rightWall",
 			"floor"
 		);
-		for (int w = 0; w < this.map.width; w++) {
-			this.map.map[w][0] = -1;
-			for (int d = 1; d < this.map.depth; d++) {
-				this.map.map[w][d] = 0;
+		this.map.map[3][3].height = 3;
+		for (int i = 0; i < map.width; i++) {
+			if (i != 4) {
+				this.map.map[i][0].height = 0;
+				this.map.map[i][0].floor = null;
+				this.map.map[i][0].wallLeft = null;
+				this.map.map[i][0].wallRight = null;
 			}
 		}
-		this.map.map[0][5] = 3;
-		this.map.map[2][0] = 0;
-		this.avatar = new Avatar(map, 2, 0);
+		this.avatar = new Avatar(map, 4, 1);
+		this.map.map[0][1].floor = "floor";
+		this.map.map[4][0].action = new Action("go back", "@BACK");
+		new LeftDoor(map, 0, 1);
+		new RightDoor(map, 1, 6);
+	}
+
+	public String getAction() {
+		if (avatar.action == null)
+			return null;
+		return avatar.action.name;
+	}
+
+	public String getNarration() {
+		if (avatar.action == null)
+			return null;
+		return avatar.action.narration;
 	}
 
 	public void left() {

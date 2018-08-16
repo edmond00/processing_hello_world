@@ -62,5 +62,15 @@ public class Avatar extends MovingObject {
 				centerTileX+(int)positionX, centerTileY+(int)positionY);
 		}
 	}
-}
 
+	void update() {
+		super.update();
+		IsoObject frontObject = map.getFirstObjectAt(frontX(), frontY());
+		action = null;
+		if (frontObject != null && frontObject.action != null) {
+			action = frontObject.action;
+		}
+		if (action == null)
+			action = map.map[x][y].action;
+	}
+}

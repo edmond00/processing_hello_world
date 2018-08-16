@@ -17,7 +17,7 @@ public class IsoMap {
 	int width;
 	int depth;
 	LinkedList<IsoObject>[][] objects;
-	int[][] map;
+	IsoTile[][] map;
 
 	public IsoMap(
 		int width, int depth,
@@ -27,18 +27,32 @@ public class IsoMap {
 	) {
 		this.width = width;
 		this.depth = depth;
-		this.wallLeft = wallLeft;
-		this.wallRight = wallRight;
-		this.floor = floor;
 
-		map = new int[width][depth];
+		map = new IsoTile[width][depth];
 		objects = new LinkedList[width][depth];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < depth; j++) {
+				if (i == 0 || j == depth-1)
+					putTile(i, j, new IsoTile(7, wallRight, wallLeft, null));
+				else
+					putTile(i, j, new IsoTile(2, wallRight, wallLeft, floor));
 				objects[i][j] = new LinkedList<IsoObject>();
 			}
 		}
 
+	}
+
+	void putTile(int w, int d, IsoTile tile) {
+		map[w][d] = tile;
+		tile.w = w;
+		tile.d = d;
+		tile.map = this;
+	}
+
+	int getHeight(int w, int d) {
+		if (w < 0 || d < 0 || w >= width || d >= depth)
+			return 0;
+		return map[w][d].height;
 	}
 
 	void update() {
@@ -57,43 +71,6 @@ public class IsoMap {
 		}
 	}
 
-	public void drawFloor(int x, int y) {
-		IsoEngine.self.app.draw(floor, x, y);
-	}
-
-	public void drawWall(int x, int y) {
-		IsoEngine.self.app.draw(wallLeft, x, y+tileH/2);
-		IsoEngine.self.app.draw(wallRight, x+tileW/2-1, y+tileH/2);
-	}
-
-	public void drawLeftBackWall(int x, int y) {
-		for (int i = 0; i < backWall; i++) {
-			IsoEngine.self.app.draw(wallRight, x, y-tileH/2);
-			y -= wallH;
-		}
-	}
-
-	public void drawRightBackWall(int x, int y) {
-		for (int i = 0; i < backWall; i++) {
-			IsoEngine.self.app.draw(wallLeft, x+tileW/2-1, y-tileH/2);
-			y -= wallH;
-		}
-	}
-
-	public void drawLeftFrontWall(int x, int y) {
-		for (int i = 0; i < frontWall; i++) {
-			IsoEngine.self.app.draw(wallLeft, x, y+tileH/2+1);
-			y += wallH;
-		}
-	}
-
-	public void drawRightFrontWall(int x, int y) {
-		for (int i = 0; i < frontWall; i++) {
-			IsoEngine.self.app.draw(wallRight, x+tileW/2-1, y+tileH/2+1);
-			y += wallH;
-		}
-	}
-
 	public void draw(int centerX, int centerY) {
 		int ooy = centerY - (tileH-1)/2;
 		int oox = centerX - (width * (tileW-1))/2;
@@ -101,28 +78,26 @@ public class IsoMap {
 			int ox = oox + (tileH/2) * (depth+1);
 			int oy = ooy - (tileW/4) * (depth);
 			for (int d = depth - 1; d >= 0; d--) {
-				if (map[w][d] >= 0) {
-					int x = ox;
-					int y = oy - (map[w][d]*wallH);
-					drawFloor(x, y);
-					for (int h = 0; h < map[w][d]; h++) {
-						drawWall(x, y + (h*wallH) + 1);
-					}
-					if (w == 0 /*|| map[w-1][d] < 0*/)
-						drawLeftBackWall(x, y);
-					if (d == depth-1 /*|| map[w][d+1] < 0*/)
-						drawRightBackWall(x, y);
-					if (d == 0 || map[w][d-1] < 0)
-						drawLeftFrontWall(x, y);
-					if (w == width-1 || map[w+1][d] < 0)
-						drawRightFrontWall(x, y);
-					drawObjects(w, d, x+tileW/2, y+tileH/2);
-				}
+				int H = map[w][d].height;
+				int x = ox;
+				int y = oy - (H*wallH);
+				map[w][d].drawFloor(x, y);
+				map[w][d].drawWall(x, y+1);
+				drawObjects(w, d, x+tileW/2, y+tileH/2);
 				oy += tileH / 2;
 				ox -= tileW / 2 -1;
 			}
 			ooy += tileH / 2;
 			oox += tileW / 2 -1;
 		}
+	}
+
+	public IsoObject getFirstObjectAt(int w, int d) {
+		if (w < 0 || d < 0 || w >= width || d >= depth)
+			return null;
+		LinkedList<IsoObject> listObjects = objects[w][d];
+		if (listObjects.size() <= 0)
+			return null;
+		return listObjects.getFirst();
 	}
 }

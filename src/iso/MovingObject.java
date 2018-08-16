@@ -118,7 +118,7 @@ public abstract class MovingObject extends IsoObject {
 	boolean canGo(int gx, int gy) {
 		if (gx < 0 || gx >= map.width || gy < 0 || gy >= map.depth)
 			return false;
-		if (map.map[gx][gy] != map.map[x][y])
+		if (map.map[gx][gy].height != map.map[x][y].height)
 			return false;
 		return true;
 	}
@@ -181,5 +181,28 @@ public abstract class MovingObject extends IsoObject {
 		destinationY -= gapY;
 	}
 
-}
+	int frontY() {
+		switch(state) {
+			case STOP_FRONT_LEFT:
+			case MOVING_FRONT_LEFT:
+				return y-1;
+			case STOP_BACK_RIGHT:
+			case MOVING_BACK_RIGHT:
+				return y+1;
+		}
+		return y;
+	}
 
+	int frontX() {
+		switch(state) {
+			case STOP_FRONT_RIGHT:
+			case MOVING_FRONT_RIGHT:
+				return x+1;
+			case STOP_BACK_LEFT:
+			case MOVING_BACK_LEFT:
+				return x-1;
+		}
+		return x;
+	}
+
+}

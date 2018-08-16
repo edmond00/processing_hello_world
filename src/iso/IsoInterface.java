@@ -8,5 +8,8 @@ public interface IsoInterface {
 	public void up();
 	public void right();
 	public void left();
+
+	public String getAction();
+	public String getNarration();
 }
 

@@ -5,6 +5,7 @@ public abstract class IsoObject {
 	int x;
 	int y;
 	IsoMap map;
+	Action action = null;
 	
 	public IsoObject(IsoMap map, int x, int y) {
 		this.map = map;
@@ -23,4 +24,3 @@ public abstract class IsoObject {
 		this.map.objects[this.x][this.y].addLast(this);
 	}
 }
-

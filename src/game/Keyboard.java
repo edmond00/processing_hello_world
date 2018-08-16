@@ -14,7 +14,7 @@ public class Keyboard {
 	HashMap<Integer, KEY_STATE> keymap;
 
 	Keyboard() {
-		Game.app.log("new keyboard");
+//		Game.app.log("new keyboard");
 		keymap = new HashMap<Integer, KEY_STATE>();
 	}
 
@@ -26,14 +26,14 @@ public class Keyboard {
 					return ;
 			}
 		}
-		Game.app.log("press");
+//		Game.app.log("press");
 		keymap.put(key, KEY_STATE.PRESS);
 	}
 
 	void release(Integer key) {
 		KEY_STATE actualState = keymap.get(key);
 		keymap.put(key, KEY_STATE.RELEASE);
-		Game.app.log("release");
+//		Game.app.log("release");
 	}
 
 	void update() {
@@ -41,11 +41,11 @@ public class Keyboard {
 			KEY_STATE actualState = keymap.get(key);
 			switch (actualState) {
 				case PRESS:
-					Game.app.log("pressed");
+//					Game.app.log("pressed");
 					keymap.put(key, KEY_STATE.PRESSED);
 				break;
 				case RELEASE:
-					Game.app.log("released");
+//					Game.app.log("released");
 					keymap.put(key, KEY_STATE.RELEASED);
 				break;
 			}

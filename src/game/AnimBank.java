@@ -13,6 +13,8 @@ public class AnimBank {
 		add("aliceBackRight", 20, 5, 18);
 		add("aliceFrontLeft", 20, 5, 18);
 		add("aliceFrontRight", 20, 5, 18);
+		add("doorLeft", 24, 3, 22);
+		add("doorRight", 24, 3, 22);
 	}
 
 	void add(String img, int oneStepHeight, int centerX, int centerY) {
