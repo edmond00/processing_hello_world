@@ -3,9 +3,9 @@ package iso;
 public class IsoEngine implements IsoInterface {
 
 	AppInterface app;
-	Avatar avatar;
-	IsoMap map;
-	static IsoEngine self = null;
+	public Avatar avatar;
+	public IsoMap map;
+	public static IsoEngine self = null;
 	int centerX;
 	int centerY;
 	int scrollX = 0;
@@ -17,26 +17,16 @@ public class IsoEngine implements IsoInterface {
 		this.centerX = centerX;
 		this.centerY = centerY;
 
-		this.map = new IsoMap(
-			8, 7,
-			"leftWall",
-			"rightWall",
-			"floor"
-		);
-		this.map.map[3][3].height = 3;
-		for (int i = 0; i < map.width; i++) {
-			if (i != 4) {
-				this.map.map[i][0].height = 0;
-				this.map.map[i][0].floor = null;
-				this.map.map[i][0].wallLeft = null;
-				this.map.map[i][0].wallRight = null;
-			}
-		}
-		this.avatar = new Avatar(map, 4, 1);
-		this.map.map[0][1].floor = "floor";
-		this.map.map[4][0].action = new Action("go back", "@BACK");
-		new LeftDoor(map, 0, 1);
-		new RightDoor(map, 1, 6);
+		this.map = null;
+		this.avatar = null;
+	}
+
+	public void useMap(IsoMap map, int entryW, int entryD) {
+		this.map = map;
+		if (avatar == null)
+			this.avatar = new Avatar(map, entryW, entryD);
+		else
+			this.avatar.changeMap(map, entryW, entryD);
 	}
 
 	public String getAction() {

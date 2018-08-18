@@ -1,6 +1,7 @@
 package iso;
 
 import java.util.LinkedList;
+import tools.*;
 
 public class IsoMap {
 
@@ -14,16 +15,18 @@ public class IsoMap {
 	String wallLeft;
 	String wallRight;
 	String floor;
-	int width;
-	int depth;
+	public int width;
+	public int depth;
 	LinkedList<IsoObject>[][] objects;
-	IsoTile[][] map;
+	public IsoTile[][] map;
 
 	public IsoMap(
 		int width, int depth,
 		String wallLeft,
 		String wallRight,
-		String floor
+		String floor,
+		int floorHeight,
+		int wallHeightMin, int WallHeightMax
 	) {
 		this.width = width;
 		this.depth = depth;
@@ -32,17 +35,22 @@ public class IsoMap {
 		objects = new LinkedList[width][depth];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < depth; j++) {
-				if (i == 0 || j == depth-1)
-					putTile(i, j, new IsoTile(7, wallRight, wallLeft, null));
+				int randH = Rand.rand(wallHeightMin, WallHeightMax);
+				if (i == 0 && j == depth-1)
+					putTile(i, j, new IsoTile(randH, null, null, null));
+				else if (j == depth-1)
+					putTile(i, j, new IsoTile(randH, null, wallLeft, null));
+				else if (i == 0)
+					putTile(i, j, new IsoTile(randH, wallRight, null, null));
 				else
-					putTile(i, j, new IsoTile(2, wallRight, wallLeft, floor));
+					putTile(i, j, new IsoTile(floorHeight, wallRight, wallLeft, floor));
 				objects[i][j] = new LinkedList<IsoObject>();
 			}
 		}
 
 	}
 
-	void putTile(int w, int d, IsoTile tile) {
+	public void putTile(int w, int d, IsoTile tile) {
 		map[w][d] = tile;
 		tile.w = w;
 		tile.d = d;

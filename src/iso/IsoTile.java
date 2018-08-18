@@ -1,8 +1,8 @@
 package iso;
 
 public class IsoTile {
-	Action action = null;
-	int height = 0;
+	public Action action = null;
+	public int height = 0;
 	int w = 0;
 	int d = 0;
 	String wallRight = null;

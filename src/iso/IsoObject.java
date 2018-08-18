@@ -6,7 +6,7 @@ public abstract class IsoObject {
 	int y;
 	IsoMap map;
 	Action action = null;
-	
+
 	public IsoObject(IsoMap map, int x, int y) {
 		this.map = map;
 		this.x = 0;
@@ -22,5 +22,9 @@ public abstract class IsoObject {
 		this.x = x;
 		this.y = y;
 		this.map.objects[this.x][this.y].addLast(this);
+	}
+
+	void remove() {
+		this.map.objects[this.x][this.y].remove(this);
 	}
 }

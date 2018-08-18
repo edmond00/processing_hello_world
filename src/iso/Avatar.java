@@ -73,4 +73,12 @@ public class Avatar extends MovingObject {
 		if (action == null)
 			action = map.map[x][y].action;
 	}
+
+	void changeMap(IsoMap map, int entryW, int entryD) {
+		this.map.objects[this.x][this.y].remove(this);
+		this.map = map;
+		this.x = entryW;
+		this.y = entryD;
+		this.map.objects[this.x][this.y].addLast(this);
+	}
 }

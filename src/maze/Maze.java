@@ -6,10 +6,15 @@ import text.*;
 public class Maze {
 
 	TextGenerator<Maze> narration = null;
-	Maze self = null;
+	static Maze self = null;
+
+	Room actualRoom;
 
 	public Maze() {
 		self = this;
+		actualRoom = new Room(null);
+		actualRoom.use();
+
 		narration = new TextGenerator<Maze>(this);
 
 		Conceptualise.entity("LEFTRIGHT").asBagOfWords("on her left", "on her right");
@@ -37,9 +42,9 @@ public class Maze {
 		Conceptualise.entity("ROOMMIDDLE").asText("In the middle of the room, there was @OBJECT");
 		Conceptualise.entity("MIND").asText("She wanted to @ACTION");
 
-		Conceptualise.entity("BACK").asText("She turned back");
-		Conceptualise.entity("LEFT").asText("She took the door on the left");
-		Conceptualise.entity("RIGHT").asText("She took the door on the right");
+		Conceptualise.entity("BACK").asText("She turned back #goBack");
+		Conceptualise.entity("LEFT").asText("She took the door on the left #goLeft");
+		Conceptualise.entity("RIGHT").asText("She took the door on the right #goRight");
 	}
 
 	public String tell(String str) {
@@ -48,5 +53,17 @@ public class Maze {
 		String story = narration.say(str);
 		Log.debug(story);
 		return story;
+	}
+
+	public void goBack() {
+		actualRoom.goBack();
+	}
+
+	public void goRight() {
+		actualRoom.goRight();
+	}
+
+	public void goLeft() {
+		actualRoom.goLeft();
 	}
 }
