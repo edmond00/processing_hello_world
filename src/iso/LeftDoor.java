@@ -4,7 +4,7 @@ public class LeftDoor extends Door {
 
 	public LeftDoor(IsoMap map, int x, int y) {
 		super(map, x, y);
-		action = new Action("open the door", "@LEFT");;
+		action = new Action("open the door", "@LEFT. @DESCRIPTION");
 	}
 
 	void draw(int centerTileX, int centerTileY) {

@@ -37,6 +37,7 @@ public class Game extends PApplet implements AppInterface {
 			anim = new AnimBank();
 			keyboard = new Keyboard();
 			maze = new Maze();
+			maze.start();
 			//surface.setResizable(true);
 			PFont font = loadFont("./data/font/alice.vlw");
 			textFont(font);

@@ -84,6 +84,8 @@ public abstract class MovingObject extends IsoObject {
 	}
 
 	void endMove() {
+		if (!isMoving())
+			return ;
 		putIn(gx, gy);
 		positionX = 0;
 		positionY = 0;

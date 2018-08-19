@@ -2,8 +2,8 @@ package iso;
 
 public abstract class IsoObject {
 
-	int x;
-	int y;
+	public int x;
+	public int y;
 	IsoMap map;
 	Action action = null;
 

@@ -8,6 +8,8 @@ public class Room {
 	Room backRoom = null;
 	Room leftRoom = null;
 	Room rightRoom = null;
+	IsoObject leftDoor = null;
+	IsoObject rightDoor = null;
 
 	IsoMap map;
 	int entryW;
@@ -39,46 +41,61 @@ public class Room {
 					this.map.putTile(i, 0, new IsoTile(0, null, null, null));
 				}
 			}
-			this.map.map[entryW][entryD].action = new Action("go back", "@BACK");
+			this.map.map[entryW][entryD].action = new Action("go back", "@BACK. @DESCRIPTION");
 		}
 
+	}
+
+	void addBothDoor() {
 		addLeftDoor();
 		addRightDoor();
 	}
 
 	void addLeftDoor() {
+		if (leftDoor != null)
+			return ;
 		int w = 0;
-		int d = 2 + Rand.rand(map.depth-3);
-		map.map[w][d].height = wallHeightMax;
-		new LeftDoor(map, w, d);
+		int d = 1 + Rand.rand(map.depth-3);
+		map.map[w][d].height = wallHeightMax -2;
+		leftDoor = new LeftDoor(map, w, d);
 	}
 
 	void addRightDoor() {
-		int w = 2 + Rand.rand(map.width-3);
+		if (rightDoor != null)
+			return ;
+		int w = 2 + Rand.rand(map.width-2);
 		int d = map.depth-1;
-		map.map[w][d].height = wallHeightMax;
-		new RightDoor(map, w, d);
+		map.map[w][d].height = wallHeightMax -2;
+		rightDoor = new RightDoor(map, w, d);
 	}
 
-	void use() {
-		IsoEngine.self.useMap(map, entryW, entryD);
+	void use(int pw, int pd) {
+		IsoEngine.self.useMap(map, pw, pd);
 		Maze.self.actualRoom = this;
 	}
 	
 	void goBack() {
 		Log.debug("GO BACK : " + backRoom);
-		backRoom.use();
+		int pw, pd;
+		if (backRoom.leftRoom == this) {
+			pw = backRoom.leftDoor.x + 1;
+			pd = backRoom.leftDoor.y;
+		} else {
+			pw = backRoom.rightDoor.x;
+			pd = backRoom.rightDoor.y - 1;
+		}
+		backRoom.use(pw, pd);
 	}
 	
 	void goLeft() {
-		if (leftRoom== null)
+		if (leftRoom == null)
 			leftRoom = new Room(this);
-		leftRoom.use();
+		leftRoom.use(leftRoom.entryW, leftRoom.entryD);
 	}
 	
 	void goRight() {
-		if (rightRoom== null)
+		if (rightRoom == null)
 			rightRoom = new Room(this);
-		rightRoom.use();
+		rightRoom.use(rightRoom.entryW, rightRoom.entryD);
 	}
 }
