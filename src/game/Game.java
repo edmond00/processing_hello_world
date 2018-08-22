@@ -14,17 +14,18 @@ public class Game extends PApplet implements AppInterface {
 		int y = 180;
 		Keyboard keyboard;
 		Minim minim;
-		SoundBank sound;
+		public SoundBank sound;
 		ImageBank img;
 		AnimBank anim;
 		Maze maze;
 
+		RGBA textColor;
 		int step = 0;
 		int lastUpdate = 0;
 
 		IsoInterface iso = null;
 
-		static Game app = null;
+		public static Game app = null;
 
 		public void setup(){
 			double resize = 3.0;
@@ -40,6 +41,7 @@ public class Game extends PApplet implements AppInterface {
 			maze.start();
 			//surface.setResizable(true);
 			PFont font = loadFont("./data/font/alice.vlw");
+			textColor = new RGBA(215,215,215);
 			textFont(font);
 			textAlign(CENTER, CENTER);
 		}
@@ -71,6 +73,7 @@ public class Game extends PApplet implements AppInterface {
 			return step;
 		}
 
+
 		public void draw(){
 			int now = millis();
 			if (now - lastUpdate > 30) {
@@ -80,9 +83,14 @@ public class Game extends PApplet implements AppInterface {
 				keyboard.update();
 				iso.update();
 				background(10,0,10);
+				maze.update(step);
+
+				Drawer.drawStory(Maze.self.story);
+
 				iso.draw();
 				String action = iso.getAction();
 				if (action != null) {
+					Drawer.useColor(textColor);
 					textSize(40);
 					text("Press space to " + action, width/2, height/8);
 				}

@@ -11,6 +11,8 @@ public class SoundBank {
 	SoundBank() {
 		bank = new Hashtable<String, AudioPlayer>();
 		add("bip");
+		add("write");
+		add("write2");
 	}
 
 	void add(String file) {
@@ -25,7 +27,7 @@ public class SoundBank {
 		bank.put(link, file);
 	}
 
-	 void play(String key) {
+	 public void play(String key) {
 		AudioPlayer player = bank.get(key);
 		if (player != null) {
 			player.rewind();
