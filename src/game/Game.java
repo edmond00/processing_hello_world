@@ -18,8 +18,10 @@ public class Game extends PApplet implements AppInterface {
 		ImageBank img;
 		AnimBank anim;
 		Maze maze;
+		Editor editor;
 
 		RGBA textColor;
+		RGBA blocked;
 		int step = 0;
 		int lastUpdate = 0;
 
@@ -38,10 +40,17 @@ public class Game extends PApplet implements AppInterface {
 			anim = new AnimBank();
 			keyboard = new Keyboard();
 			maze = new Maze();
+			editor = new Editor();
 			maze.start();
+			
+			//FOR TEST
+				editor.editStory(maze.story);
+			//END TEST
+
 			//surface.setResizable(true);
 			PFont font = loadFont("./data/font/alice.vlw");
 			textColor = new RGBA(215,215,215);
+			blocked = new RGBA(50,50,50);
 			textFont(font);
 			textAlign(CENTER, CENTER);
 		}
@@ -73,27 +82,39 @@ public class Game extends PApplet implements AppInterface {
 			return step;
 		}
 
+		public void drawMaze() {
+			controlMaze();
+			maze.update(step);
+			Drawer.drawStory(Maze.self.story);
+			iso.draw();
+			String action = iso.getAction();
+			if (action != null) {
+				Drawer.useColor(textColor);
+				textSize(40);
+				text("Press space to " + action, width/2, height/8);
+			}
+		}
+
+		public void drawEditor() {
+			controlEditor();
+			editor.update(step);
+			editor.draw();
+		}
 
 		public void draw(){
 			int now = millis();
 			if (now - lastUpdate > 30) {
 				lastUpdate = now;
 				step += 1;
-				control();
-				keyboard.update();
 				iso.update();
 				background(10,0,10);
-				maze.update(step);
 
-				Drawer.drawStory(Maze.self.story);
+				if (Editor.editing == false)
+					drawMaze();
+				else
+					drawEditor();
 
-				iso.draw();
-				String action = iso.getAction();
-				if (action != null) {
-					Drawer.useColor(textColor);
-					textSize(40);
-					text("Press space to " + action, width/2, height/8);
-				}
+				keyboard.update();
 			}
 		}
 		
@@ -115,7 +136,17 @@ public class Game extends PApplet implements AppInterface {
 				keyboard.release((int)key);
 		}
 
-		void control() {
+		void controlEditor() {
+			if (keyboard.isPress(UP))
+				editor.selection -= 1;
+			if (keyboard.isPress(DOWN))
+				editor.selection += 1;
+			if (keyboard.isPress((int)' ')) {
+				editor.press();
+			}
+		}
+
+		void controlMaze() {
 			if (keyboard.isPressed(LEFT))
 				iso.left();
 			if (keyboard.isPressed(RIGHT))

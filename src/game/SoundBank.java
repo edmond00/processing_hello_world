@@ -13,6 +13,7 @@ public class SoundBank {
 		add("bip");
 		add("write");
 		add("write2");
+		add("erase");
 	}
 
 	void add(String file) {
