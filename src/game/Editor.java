@@ -34,12 +34,12 @@ public class Editor extends Drawer {
 		choicesRegex = new HashMap<String, Pattern>(); 
 		actualChoices = new LinkedList<String>();
 
-		addChoiceRegex("door", "(one door on her (left|right)|two doors)");
+		addChoiceRegex("door", "(a room with one door on her (left|right)|a room with two doors)");
 
 		//FOR TEST
-		addChoice("door", "one door on her left");
-		addChoice("door", "one door on her right");
-		addChoice("door", "two doors");
+		addChoice("door", "a room with one door on her left");
+		addChoice("door", "a room with one door on her right");
+		addChoice("door", "a room with two doors");
 		//END TEST
 	}
 
@@ -80,8 +80,9 @@ public class Editor extends Drawer {
 	}
 
 	void editStory(String story) {
+		Game.app.sound.play("openJournal");
 		editing = true;
-		this.story = story;
+		this.story = story.trim();
 	}
 
 	void removeLastCharacter() {
@@ -114,11 +115,15 @@ public class Editor extends Drawer {
 			return;
 		}
 		if (toWrite.length() > 0) {
+			if (toWrite.charAt(0) != ' ')
+				Game.app.sound.play("write2");
 			story += toWrite.charAt(0);
 			toWrite = toWrite.substring(1, toWrite.length());
 			return;
 		}
 		if (buffer.length() > 0) {
+			if (buffer.charAt(0) != ' ')
+				Game.app.sound.play("write2");
 			story += buffer.charAt(0);
 			buffer = buffer.substring(1, buffer.length());
 			return;
@@ -179,14 +184,16 @@ public class Editor extends Drawer {
 		return false;
 	}
 
+	void endEditing() {
+		Game.app.newMaze(story);
+		this.editing = false;
+	}
+
 	void draw() {
 		Drawer.drawStory(story);
 
 		int n = 0;
 
-		if (isSelected(n))
-			this.editing = false;
-		n = printOption("continue", n);
 			
 
 		if (story.length() > 0) {
@@ -201,6 +208,12 @@ public class Editor extends Drawer {
 				this.startReplace(c);
 			n = printOption("rewrite with '" + choice + "'", n);
 			c += 1;
+		}
+	
+		if (c == 0) {
+			if (isSelected(n))
+				endEditing();
+			n = printOption("continue", n);
 		}
 
 

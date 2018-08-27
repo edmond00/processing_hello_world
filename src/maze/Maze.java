@@ -21,26 +21,19 @@ public class Maze {
 		narration = new TextGenerator<Maze>(this);
 
 		Conceptualise.entity("QUAL").asBagOfWords("innocent", "little", "young", "lost");
-		Conceptualise.entity("SHE").asBagOfWords("she", "she", "she","she", "Alice",  "Alice", "the girl", "the child", "the girl", "the child", "the @QUAL girl", "the @QUAL child");
+		Conceptualise.entity("SHE").asBagOfWords("she", "she", "she","she", "Alice", "the girl", "the child", "the girl", "the child", "the @QUAL girl", "the @QUAL child");
 
 		Conceptualise.entity("LEFTRIGHT").asBagOfWords("on her left #addLeftDoor", "on her right #addRightDoor");
 		Conceptualise.entity("ONETWO").asBagOfWords("one door @LEFTRIGHT", "two doors #addBothDoor");
-		Conceptualise.entity("FOOD").asBagOfWords("a bone", "some fish", "some worms", "a carrot", "a lemon");
-		Conceptualise.entity("ANIMAL").asBagOfWords("a cat", "a rabbit", "a crow", "a wolf");
-		Conceptualise.entity("POTION").asBagOfWords("a blue potion", "a red potion", "a green potion");
-		Conceptualise.entity("FURNITURE").asBagOfWords("a mirror", "a clock", "a chest");
+		Conceptualise.entity("JOURNAL").asBagOfWords("her dream journal", "her dream diary");
+
+		Conceptualise.entity("CURRENTDREAM").asBagOfWords("dream", "nightmare", "story", "adventure", "journey");
+		Conceptualise.entity("NOTE").asBagOfWords("note", "write", "record", "rewrite", "revise", "change", "fix");
 
 		Conceptualise.entity("DIDIT").asText("@SHE did it");
 		Conceptualise.entity("DIDNOT").asText("But she did not do this");
 		Conceptualise.entity("CHOICE").asBagOfWords("@DIDIT", "@DIDNOT");
-		Conceptualise.entity("OBJECT").asBagOfWords("@ANIMAL", "@POTION", "@FURNITURE");
-
-		Conceptualise.entity("ACTION")
-		.asText("give @FOOD to him").when("OBJECT").equals("@ANIMAL")
-		.asText("drink the potion").when("OBJECT").equals("@POTION")
-		.asText("look the mirror").when("FURNITURE").contains("mirror")
-		.asText("set the clock to 8 AM").when("FURNITURE").contains("clock")
-		.asText("open the chest").when("FURNITURE").contains("chest");
+		Conceptualise.entity("OBJECT").asBagOfWords("@JOURNAL #putJournal");
 
 
 		Conceptualise.entity("NEWROOM").asText("@SHE found herself in a room with @ONETWO");
@@ -51,30 +44,41 @@ public class Maze {
 		.asText("@OLDROOM").when("ONETWO").exists()
 		.asText("@NEWROOM").when("ONETWO").doesNotExist();
 
-		Conceptualise.entity("WAKEUP").asText("Alice woke up in a strange maze");
+		Conceptualise.entity("WAKEUP").asText("@SHE woke up in a strange maze");
 		Conceptualise.entity("ROOMMIDDLE").asText("In the middle of the room, there was @OBJECT");
+		Conceptualise.entity("FIRSTJOURNAL").asText("In the middle of the room, there was @JOURNAL #putJournal");
 		Conceptualise.entity("MIND").asText("@SHE wanted to @ACTION");
 
 		Conceptualise.entity("BACK").asText("@SHE turned back #goBack").switchBack();
 		Conceptualise.entity("LEFT").asText("@SHE took the door on the left #goLeft").switchTo("leftContext");
 		Conceptualise.entity("RIGHT").asText("@SHE took the door on the right #goRight").switchTo("rightContext");
+		Conceptualise.entity("REWRITE").asText("@SHE opened @JOURNAL to @NOTE her @CURRENTDREAM #rewrite");
 	}
 
-	public void start() {
-//		tell("@WAKEUP. @DESCRIPTION");
-		listen("Alice woke up in a strange maze. she found herself in a room with two doors. she took the door on the left. the young child found herself in a room with one door on her right. she took the door on the right. she found herself in a room with one door on her left.");
-	}
 
 	public void listen(String str) {
 		this.story = str;
 		narration.listen(str);
 	}
 
+	public void start(String story) {
+		narration.clean();
+		listen(story);
+		Log.debug("start form : " + story);
+		narration.global.printHistory();
+		if (narration.global.hasSaid("WAKEUP") == null)
+			tell("@WAKEUP");
+		if (narration.context.hasSaid("DESCRIPTION") == null)
+			tell("@DESCRIPTION");
+		if (narration.global.hasSaid("JOURNAL") == null)
+			tell("@FIRSTJOURNAL");
+	}
+
 	public String tell(String str) {
 		if (str == null)
 			return null;
 		String text = narration.say(str);
-		Log.debug(text);
+		Log.debug("tell : " + text);
 		this.buffer = this.buffer + " " + text;
 //		this.story = this.story + " " + text;
 		return text;
@@ -89,6 +93,11 @@ public class Maze {
 				buffer = buffer.substring(1);
 			}
 		}
+	}
+
+	public void fastUpdate() {
+		story = story + buffer;
+		buffer = "";
 	}
 
 
@@ -114,5 +123,13 @@ public class Maze {
 
 	public void addBothDoor() {
 		actualRoom.addBothDoor();
+	}
+	public void putJournal() {
+		actualRoom.putJournal();
+	}
+
+	public void rewrite() {
+		fastUpdate();
+		Game.app.rewrite(story);
 	}
 }

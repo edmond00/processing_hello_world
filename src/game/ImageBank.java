@@ -15,6 +15,7 @@ public class ImageBank {
 		add("floor");
 		add("leftWall");
 		add("rightWall");
+		add("diary");
 	}
 
 	void add(String file) {

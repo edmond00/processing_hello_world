@@ -122,6 +122,8 @@ public abstract class MovingObject extends IsoObject {
 			return false;
 		if (map.map[gx][gy].height != map.map[x][y].height)
 			return false;
+		if (map.objects[gx][gy].size() > 0)
+			return false;
 		return true;
 	}
 

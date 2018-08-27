@@ -98,4 +98,10 @@ public class Room {
 			rightRoom = new Room(this);
 		rightRoom.use(rightRoom.entryW, rightRoom.entryD);
 	}
+
+	void putJournal() {
+		int w = 2 + Rand.rand(map.width-2);
+		int d = 1 + Rand.rand(map.depth-3);
+		new Diary(map, w, d);
+	}
 }

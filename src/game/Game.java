@@ -39,13 +39,9 @@ public class Game extends PApplet implements AppInterface {
 			img = new ImageBank(resize);
 			anim = new AnimBank();
 			keyboard = new Keyboard();
-			maze = new Maze();
 			editor = new Editor();
-			maze.start();
+			newMaze("");
 			
-			//FOR TEST
-				editor.editStory(maze.story);
-			//END TEST
 
 			//surface.setResizable(true);
 			PFont font = loadFont("./data/font/alice.vlw");
@@ -53,6 +49,13 @@ public class Game extends PApplet implements AppInterface {
 			blocked = new RGBA(50,50,50);
 			textFont(font);
 			textAlign(CENTER, CENTER);
+
+			sound.loop("musicMix");
+		}
+
+		public void newMaze(String story) {
+			maze = new Maze();
+			maze.start(story);
 		}
 
 		public void draw(String img, int x, int y) {
@@ -99,6 +102,10 @@ public class Game extends PApplet implements AppInterface {
 			controlEditor();
 			editor.update(step);
 			editor.draw();
+		}
+
+		public void rewrite(String story) {
+			editor.editStory(story);
 		}
 
 		public void draw(){

@@ -1,5 +1,7 @@
 package iso;
 
+import game.*;
+
 public class Avatar extends MovingObject {
 
 	public Avatar(IsoMap map, int x, int y) {
@@ -76,6 +78,7 @@ public class Avatar extends MovingObject {
 
 	void changeMap(IsoMap map, int entryW, int entryD) {
 		endMove();
+		Game.app.sound.play("changeRoom");
 		this.map.objects[this.x][this.y].remove(this);
 		this.map = map;
 		this.x = entryW;
