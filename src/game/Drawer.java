@@ -33,10 +33,22 @@ public class Drawer {
 		int y = Game.app.height - 50;
 		RGBA color = new RGBA(120,120,140); 
 
+		RGBA colorGlitch = new RGBA(
+			Rand.rand(130) + 100,
+			Rand.rand(130) + 100,
+			Rand.rand(130) + 100
+		);
+
 		Game.app.textSize(20);
 
 		LinkedList<String> lines = splitStory(story);
 		for (String line : lines) {
+			if (Game.app.glitch) {
+				int gy = y + Rand.rand(20) - 10;
+				int gx = x + Rand.rand(20) - 10;
+				useColor(colorGlitch);
+				Game.app.text(line, gx, gy);
+			}
 			useColor(color);
 			Game.app.text(line, x, y);
 			y -= lineGap;

@@ -81,6 +81,7 @@ public class Editor extends Drawer {
 
 	void editStory(String story) {
 		Game.app.sound.play("openJournal");
+		Game.app.rmusic();
 		editing = true;
 		this.story = story.trim();
 	}
@@ -92,7 +93,7 @@ public class Editor extends Drawer {
 
 	void removeLetter() {
 		canBeRewrite();
-		if (story.charAt(story.length()-1) == '.') {
+		if (story.length() > 0 && story.charAt(story.length()-1) == '.') {
 			buffer = "";
 		}
 		if (story.length() <= 0 ||
@@ -186,6 +187,7 @@ public class Editor extends Drawer {
 
 	void endEditing() {
 		Game.app.newMaze(story);
+		Game.app.music();
 		this.editing = false;
 	}
 

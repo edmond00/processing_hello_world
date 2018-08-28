@@ -1,5 +1,8 @@
 package iso;
 
+import game.*;
+import tools.*;
+
 public class IsoEngine implements IsoInterface {
 
 	AppInterface app;
@@ -62,7 +65,10 @@ public class IsoEngine implements IsoInterface {
 	}
 
 	public void draw() {
-		map.draw(centerX+scrollX, centerY+scrollY);
+		if (Game.app.glitch)
+			map.draw(centerX+scrollX + Rand.rand(30) - 15, centerY+scrollY + Rand.rand(30) - 15);
+		else
+			map.draw(centerX+scrollX, centerY+scrollY);
 	}
 }
 

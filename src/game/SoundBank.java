@@ -11,13 +11,18 @@ public class SoundBank {
 	SoundBank() {
 		bank = new Hashtable<String, AudioPlayer>();
 		add("bip");
+		add("glitch");
 		add("changeRoom");
 		add("openJournal");
 		add("music");
 		add("musicMix");
 		add("rmusic");
 		add("rmusic2");
+		add("rmusicFade");
 		add("music2");
+		add("songBad");
+		add("songBad2");
+		add("rsongBad");
 		add("write");
 		add("write2");
 		add("erase");

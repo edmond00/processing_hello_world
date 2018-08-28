@@ -12,6 +12,7 @@ public class Game extends PApplet implements AppInterface {
 
 		int x = 180;
 		int y = 180;
+		public boolean glitch = false;
 		Keyboard keyboard;
 		Minim minim;
 		public SoundBank sound;
@@ -19,6 +20,8 @@ public class Game extends PApplet implements AppInterface {
 		AnimBank anim;
 		Maze maze;
 		Editor editor;
+		String music;
+		String rmusic;
 
 		RGBA textColor;
 		RGBA blocked;
@@ -50,7 +53,24 @@ public class Game extends PApplet implements AppInterface {
 			textFont(font);
 			textAlign(CENTER, CENTER);
 
-			sound.loop("musicMix");
+			music = "songBad2";
+			rmusic = "rsongBad";
+			sound.loop(music);
+			sound.loop(rmusic);
+			sound.loop("rmusicFade");
+			music();
+		}
+
+		public void music() {
+			sound.mute(rmusic);
+			sound.unmute(music);
+			glitch = true;
+		}
+
+		public void rmusic() {
+			sound.mute(music);
+			sound.unmute(rmusic);
+			glitch = true;
 		}
 
 		public void newMaze(String story) {
@@ -108,13 +128,30 @@ public class Game extends PApplet implements AppInterface {
 			editor.editStory(story);
 		}
 
+		public void drawBackground() {
+			int step = this.step / 2;
+			int r = abs(8 - step % 19);
+			int g = 0;
+			int b = abs(12 - step % 25);
+			if (Rand.rand(7) == 0)
+				glitch = false;
+			if (Rand.rand(120) == 0) {
+				r = Rand.rand(60);
+				g = Rand.rand(20);
+				b = Rand.rand(80);
+				glitch = true;
+				sound.play("glitch");
+			}
+			background(r,g,b);
+		}
+
 		public void draw(){
 			int now = millis();
 			if (now - lastUpdate > 30) {
 				lastUpdate = now;
 				step += 1;
 				iso.update();
-				background(10,0,10);
+				drawBackground();
 
 				if (Editor.editing == false)
 					drawMaze();
