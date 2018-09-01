@@ -35,24 +35,25 @@ public class Editor extends Drawer {
 		actualChoices = new LinkedList<String>();
 
 		addChoiceRegex("door", "(a room with one door on her (left|right)|a room with (two doors|no door|no exit|no way to continue))");
+		addChoiceRegex("food", "(a cup of milk|a piece of lemon|some worms|a corrot)");
+		addChoiceRegex("animal", "(a (cat|crow|rabbit)|a (smilling|clever|hungry|lonely|happy|smart|playful|greedy) (cat|crow|rabbit))");
 
-		//FOR TEST
-		addChoice("door", "a room with one door on her left");
-		addChoice("door", "a room with one door on her right");
-		addChoice("door", "a room with two doors");
-		//END TEST
 	}
 
 	void addChoiceRegex(String group, String regex) {
 		choicesRegex.put(group, Pattern.compile("(" + regex + ")$"));
 	}
 
-	void addChoice(String group, String choice) {
+	public void addChoice(String group, String choice) {
 		if (choices.containsKey(group) == false) {
 			LinkedList<String> tmp = new LinkedList<String>();
 			choices.put(group, tmp);
 		}
-		choices.get(group).add(choice);
+		if (choices.get(group).contains(choice) == false) {
+			choices.get(group).add(choice);
+		}
+			Game.app.newWordsAlert(choice);
+			Game.app.sound.play("item");
 	}
 
 	boolean choiceMatch(String group) {
@@ -167,7 +168,7 @@ public class Editor extends Drawer {
 		if (rewriting == false && deleting == false && selection == n) {
 			Drawer.useColor(Game.app.textColor);
 		} else {
-			Drawer.useColor(Game.app.blocked);
+			Drawer.useColor(Game.app.lightGrey);
 		}
 		Game.app.text(option, x, y);
 		return n+1;
@@ -189,6 +190,7 @@ public class Editor extends Drawer {
 		Game.app.newMaze(story);
 		Game.app.music();
 		this.editing = false;
+		Game.app.maze.rewriteFlag = false;
 	}
 
 	void draw() {
@@ -201,8 +203,14 @@ public class Editor extends Drawer {
 		if (story.length() > 0) {
 			if (isSelected(n))
 				this.startDelete();
-			n = printOption("erase", n);
+			n = printOption("erase the last sentence", n);
 		}
+
+		if (isSelected(n)) {
+			story = "";
+			endEditing();
+		}
+		n = printOption("erase all and restart from begining", n);
 
 		int c = 0;
 		for (String choice : actualChoices) {

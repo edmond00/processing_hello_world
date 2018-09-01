@@ -5,7 +5,7 @@ import tools.*;
 
 public class Drawer {
 
-	static int storyLineLenght = 70;
+	static int storyLineLenght = 60;
 
 	public static void useColor(RGBA color) {
 		Game.app.fill(color.r, color.g, color.b, color.a);
@@ -22,7 +22,7 @@ public class Drawer {
 			}
 		}
 		if (lastCut < story.length()-1)
-		splits.addFirst(story.substring(lastCut, story.length()));
+			splits.addFirst(story.substring(lastCut, story.length()));
 		return splits;
 	}
 
@@ -46,6 +46,9 @@ public class Drawer {
 
 		Game.app.textSize(20);
 
+		if (story.length() > 1000) {
+			story = story.substring(story.length() -1000);
+		}
 		LinkedList<String> lines = splitStory(story);
 		for (String line : lines) {
 			if (Game.app.glitch) {

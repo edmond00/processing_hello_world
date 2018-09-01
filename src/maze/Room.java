@@ -110,6 +110,26 @@ public class Room {
 		int d = 2 + Rand.rand(map.depth-4);
 		new Box(map, w, d);
 	}
+	void putCat() {
+		int w = 2 + Rand.rand(map.width-2);
+		int d = 2 + Rand.rand(map.depth-4);
+		new Cat(map, w, d);
+	}
+	void putCrow() {
+		int w = 2 + Rand.rand(map.width-2);
+		int d = 2 + Rand.rand(map.depth-4);
+		new Crow(map, w, d);
+	}
+	void putRabbit() {
+		int w = 2 + Rand.rand(map.width-2);
+		int d = 2 + Rand.rand(map.depth-4);
+		new Rabbit(map, w, d);
+	}
+	void putQueen(String color) {
+		int w = 2 + Rand.rand(map.width-2);
+		int d = 2 + Rand.rand(map.depth-4);
+		new Queen(map, w, d, color);
+	}
 
 	void putCornerJournal() {
 		int w = map.width-1;

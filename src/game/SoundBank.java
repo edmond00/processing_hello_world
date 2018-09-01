@@ -26,6 +26,9 @@ public class SoundBank {
 		add("write");
 		add("write2");
 		add("erase");
+		add("item");
+		add("openBox");
+		add("feed");
 	}
 
 	void add(String file) {

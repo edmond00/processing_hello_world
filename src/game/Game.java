@@ -19,12 +19,13 @@ public class Game extends PApplet implements AppInterface {
 		public SoundBank sound;
 		ImageBank img;
 		AnimBank anim;
-		Maze maze;
-		Editor editor;
+		public Maze maze;
+		public Editor editor;
 		String music;
 		String rmusic;
 
 		RGBA textColor;
+		RGBA lightGrey;
 		RGBA blocked;
 		int step = 0;
 		int lastUpdate = 0;
@@ -32,6 +33,8 @@ public class Game extends PApplet implements AppInterface {
 		IsoInterface iso = null;
 
 		public static Game app = null;
+
+		public String alerting = null;
 
 		public void setup(){
 			double resize = 3.0;
@@ -49,7 +52,8 @@ public class Game extends PApplet implements AppInterface {
 
 			//surface.setResizable(true);
 			PFont font = loadFont("./data/font/alice.vlw");
-			textColor = new RGBA(215,215,215);
+			textColor = new RGBA(255,255,255);
+			lightGrey = new RGBA(125,125,125);
 			blocked = new RGBA(50,50,50);
 			textFont(font);
 			textAlign(CENTER, CENTER);
@@ -117,6 +121,8 @@ public class Game extends PApplet implements AppInterface {
 				textSize(40);
 				text("Press space to " + action, width/2, height/8);
 			}
+			if (alerting != null)
+				drawAlert();
 		}
 
 		public void drawEditor() {
@@ -213,8 +219,35 @@ public class Game extends PApplet implements AppInterface {
 			if (keyboard.isPressed(DOWN))
 				iso.down();
 			if (keyboard.isPress((int)' ')) {
-				Log.debug("press space : " + iso.getNarration());
-				maze.tell(iso.getNarration());
+				if (alerting != null) {
+					alerting = null;
+				} else {
+					Log.debug("press space : " + iso.getNarration());
+					maze.tell(iso.getNarration());
+				}
 			}
+		}
+
+		public void newWordsAlert(String words) {
+			alerting = words;
+		}
+
+		public void drawAlert() {
+			int y = Game.app.height/3;
+			int x = Game.app.width/2;
+			fill(0,0,0,150);
+			rect(0,0,width, height);
+			Game.app.textSize(30);
+			Drawer.useColor(Game.app.textColor);
+			Game.app.text("You found this following words !", x, y);
+			y += 30;
+			Game.app.text("\"" + alerting + "\"", x, y);
+			y += 30;
+			Game.app.textSize(20);
+			Game.app.text("You should try to write them in your diary", x, y);
+			Drawer.useColor(Game.app.lightGrey);
+			y += 30;
+			Game.app.textSize(20);
+			Game.app.text("press space to continue", x, y);
 		}
 }
