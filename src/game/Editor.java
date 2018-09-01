@@ -34,7 +34,7 @@ public class Editor extends Drawer {
 		choicesRegex = new HashMap<String, Pattern>(); 
 		actualChoices = new LinkedList<String>();
 
-		addChoiceRegex("door", "(a room with one door on her (left|right)|a room with two doors)");
+		addChoiceRegex("door", "(a room with one door on her (left|right)|a room with (two doors|no door|no exit|no way to continue))");
 
 		//FOR TEST
 		addChoice("door", "a room with one door on her left");
@@ -91,7 +91,7 @@ public class Editor extends Drawer {
 		story = story.substring(0, story.length()-1);
 	}
 
-	void removeLetter() {
+	void removeLetter(int timestep) {
 		canBeRewrite();
 		if (story.length() > 0 && story.charAt(story.length()-1) == '.') {
 			buffer = "";
@@ -102,28 +102,28 @@ public class Editor extends Drawer {
 			endDelete();
 			return;
 		}
-		if (story.charAt(story.length()-1) != ' ')
+		if (timestep % 2 == 0)
 			Game.app.sound.play("erase");
 		removeLastCharacter();
 	}
 
-	void replaceLetter() {
+	void replaceLetter(int timestep) {
 		if (toReplace.length() > 0) {
-			if (story.charAt(story.length()-1) != ' ')
+			if (timestep % 2 == 0)
 				Game.app.sound.play("erase");
 			story = story.substring(0, story.length()-1);
 			toReplace = toReplace.substring(0, toReplace.length()-1);
 			return;
 		}
 		if (toWrite.length() > 0) {
-			if (toWrite.charAt(0) != ' ')
+			if (timestep % 2 == 0)
 				Game.app.sound.play("write2");
 			story += toWrite.charAt(0);
 			toWrite = toWrite.substring(1, toWrite.length());
 			return;
 		}
 		if (buffer.length() > 0) {
-			if (buffer.charAt(0) != ' ')
+			if (timestep % 2 == 0)
 				Game.app.sound.play("write2");
 			story += buffer.charAt(0);
 			buffer = buffer.substring(1, buffer.length());
@@ -152,11 +152,11 @@ public class Editor extends Drawer {
 	}
 
 	void update(int timestep) {
-		if (timestep % 2 == 0) {
+		if (timestep % 1 == 0) {
 			if (deleting)
-				removeLetter();
+				removeLetter(timestep);
 			if (rewriting)
-				replaceLetter();
+				replaceLetter(timestep);
 		}
 	}
 

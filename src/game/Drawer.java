@@ -38,6 +38,11 @@ public class Drawer {
 			Rand.rand(130) + 100,
 			Rand.rand(130) + 100
 		);
+		RGBA scolorGlitch = new RGBA(
+			Rand.rand(30) + 30,
+			Rand.rand(30) + 30,
+			Rand.rand(30) + 30
+		);
 
 		Game.app.textSize(20);
 
@@ -49,10 +54,18 @@ public class Drawer {
 				useColor(colorGlitch);
 				Game.app.text(line, gx, gy);
 			}
+			else if (Game.app.sglitch) {
+				int gy = y + Rand.rand(10) - 5;
+				int gx = x + Rand.rand(10) - 5;
+				useColor(scolorGlitch);
+				Game.app.text(line, gx, gy);
+			}
 			useColor(color);
 			Game.app.text(line, x, y);
 			y -= lineGap;
 			color = color.changeOpacityByPercent(opacityChange);
+			if (y < 0)
+				break;
 		}
 	}
 

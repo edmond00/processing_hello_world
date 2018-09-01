@@ -13,6 +13,7 @@ public class Game extends PApplet implements AppInterface {
 		int x = 180;
 		int y = 180;
 		public boolean glitch = false;
+		public boolean sglitch = false;
 		Keyboard keyboard;
 		Minim minim;
 		public SoundBank sound;
@@ -133,13 +134,25 @@ public class Game extends PApplet implements AppInterface {
 			int r = abs(8 - step % 19);
 			int g = 0;
 			int b = abs(12 - step % 25);
-			if (Rand.rand(7) == 0)
+			tint(240+Rand.rand(15),230+Rand.rand(25),240+Rand.rand(15),255);
+			if (Rand.rand(9) == 0) {
+				if (Rand.rand(9) == 0)
+					sglitch = false;
 				glitch = false;
-			if (Rand.rand(120) == 0) {
+			}
+			if (glitch) {
 				r = Rand.rand(60);
 				g = Rand.rand(20);
 				b = Rand.rand(80);
-				glitch = true;
+				tint(Rand.rand(255),Rand.rand(255),Rand.rand(255),Rand.rand(255));
+			} else if (sglitch) {
+				r = Rand.rand(20);
+				g = Rand.rand(5);
+				b = Rand.rand(30);
+				tint(255,100,100+Rand.rand(155),255);
+			}
+			if (Rand.rand(150) == 0) {
+				sglitch = true;
 				sound.play("glitch");
 			}
 			background(r,g,b);

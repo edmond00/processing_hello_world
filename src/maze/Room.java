@@ -25,7 +25,7 @@ public class Room {
 		this.wallHeightMin = floorHeight + 3;
 		this.wallHeightMax = floorHeight + 6;
 		this.map = new IsoMap(
-			Rand.rand(4,10), Rand.rand(4,10),
+			Rand.rand(4,10), Rand.rand(5,10),
 			"leftWall",
 			"rightWall",
 			"floor",
@@ -63,7 +63,7 @@ public class Room {
 	void addRightDoor() {
 		if (rightDoor != null)
 			return ;
-		int w = 2 + Rand.rand(map.width-2);
+		int w = 2 + Rand.rand(map.width-3);
 		int d = map.depth-1;
 		map.map[w][d].height = wallHeightMax -2;
 		rightDoor = new RightDoor(map, w, d);
@@ -101,7 +101,19 @@ public class Room {
 
 	void putJournal() {
 		int w = 2 + Rand.rand(map.width-2);
-		int d = 1 + Rand.rand(map.depth-3);
+		int d = 2 + Rand.rand(map.depth-4);
+		new Diary(map, w, d);
+	}
+
+	void putBox() {
+		int w = 2 + Rand.rand(map.width-2);
+		int d = 2 + Rand.rand(map.depth-4);
+		new Box(map, w, d);
+	}
+
+	void putCornerJournal() {
+		int w = map.width-1;
+		int d = map.depth-2;
 		new Diary(map, w, d);
 	}
 }

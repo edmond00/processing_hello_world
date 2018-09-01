@@ -67,6 +67,8 @@ public class IsoEngine implements IsoInterface {
 	public void draw() {
 		if (Game.app.glitch)
 			map.draw(centerX+scrollX + Rand.rand(30) - 15, centerY+scrollY + Rand.rand(30) - 15);
+//		else if (Game.app.sglitch)
+//			map.draw(centerX+scrollX + Rand.rand(3) - 1, centerY+scrollY + Rand.rand(3) - 1);
 		else
 			map.draw(centerX+scrollX, centerY+scrollY);
 	}
