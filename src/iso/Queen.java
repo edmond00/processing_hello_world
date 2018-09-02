@@ -6,7 +6,7 @@ public class Queen extends IsoObject {
 	public Queen(IsoMap map, int x, int y, String color) {
 		super(map, x, y);
 		this.color = color;
-		action = new Action("speak with the queen", "@QUEENSPEAK" + color);
+		action = new Action("speak with the queen", "@ALICESPEAK, @QUEENSPEAK");
 	}
 
 	void draw(int centerTileX, int centerTileY) {

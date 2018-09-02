@@ -35,8 +35,20 @@ public class Editor extends Drawer {
 		actualChoices = new LinkedList<String>();
 
 		addChoiceRegex("door", "(a room with one door on her (left|right)|a room with (two doors|no door|no exit|no way to continue))");
-		addChoiceRegex("food", "(a cup of milk|a piece of lemon|some worms|a corrot)");
-		addChoiceRegex("animal", "(a (cat|crow|rabbit)|a (smilling|clever|hungry|lonely|happy|smart|playful|greedy) (cat|crow|rabbit))");
+		addChoiceRegex("food", "(a cup of milk|a piece of lemon|some worms|a carrot)");
+		addChoiceRegex("object", "(a ((smilling|clever|hungry|lonely|happy|smart|playful|greedy) )?(cat|crow|rabbit)|the queen of (heart|spade|diamond|clubs)|a ((wooden|big|beautiful|mysterious) )?(pendulum )?(clock|box|chest)|a ((mad|crazy|moody|demented|insane) )? hatter)");
+		addChoiceRegex("clock", "(to [0-9]+ o`clock)");
+		addChoiceRegex("end", "(in a strange maze|in her bed)");
+
+		addChoiceRegex("ambiance", "(cold|warm|dark|gloomy)");
+		//DEBUG
+		addChoice("clock", "to 3 o`clock");
+		addChoice("clock", "to 2 o`clock");
+		addChoice("clock", "to 5 o`clock");
+		addChoice("clock", "to 7 o`clock");
+		addChoice("clock", "to 9 o`clock");
+		//addChoice("object", "a hatter");
+		//addChoice("end", "in her bed");
 
 	}
 
@@ -162,7 +174,7 @@ public class Editor extends Drawer {
 	}
 
 	int printOption(String option, int n) {
-		int y = Game.app.height/12 + 30 * n;
+		int y = Game.app.height/12 + 40 * n;
 		int x = Game.app.width/2;
 		Game.app.textSize(30);
 		if (rewriting == false && deleting == false && selection == n) {
@@ -171,6 +183,20 @@ public class Editor extends Drawer {
 			Drawer.useColor(Game.app.lightGrey);
 		}
 		Game.app.text(option, x, y);
+		return n+1;
+	}
+
+	int printOption(String option, String legend, int n) {
+		int y = Game.app.height/12 + 40 * n + 30;
+		int x = Game.app.width/2;
+		printOption(option, n);
+		Game.app.textSize(20);
+		if (rewriting == false && deleting == false && selection == n) {
+			Drawer.useColor(Game.app.textColor);
+		} else {
+			Drawer.useColor(Game.app.lightGrey);
+		}
+		Game.app.text(legend, x, y);
 		return n+1;
 	}
 
@@ -199,19 +225,6 @@ public class Editor extends Drawer {
 		int n = 0;
 
 			
-
-		if (story.length() > 0) {
-			if (isSelected(n))
-				this.startDelete();
-			n = printOption("erase the last sentence", n);
-		}
-
-		if (isSelected(n)) {
-			story = "";
-			endEditing();
-		}
-		n = printOption("erase all and restart from begining", n);
-
 		int c = 0;
 		for (String choice : actualChoices) {
 			if (isSelected(n))
@@ -219,12 +232,25 @@ public class Editor extends Drawer {
 			n = printOption("rewrite with '" + choice + "'", n);
 			c += 1;
 		}
+
+		if (story.length() > 0) {
+			if (isSelected(n))
+				this.startDelete();
+			n = printOption("erase the last sentence", n);
+		}
 	
 		if (c == 0) {
 			if (isSelected(n))
 				endEditing();
 			n = printOption("continue", n);
 		}
+
+		if (isSelected(n)) {
+			story = "";
+			endEditing();
+		}
+		n = printOption("erase all and restart from begining", "(the words that you have found will be conserved)", n);
+
 
 
 		if (selection >= n)

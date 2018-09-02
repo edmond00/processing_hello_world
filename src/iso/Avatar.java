@@ -78,8 +78,6 @@ public class Avatar extends MovingObject {
 
 	void changeMap(IsoMap map, int entryW, int entryD) {
 		endMove();
-		Game.app.sound.play("changeRoom");
-		Game.app.glitch = true;
 		this.map.objects[this.x][this.y].remove(this);
 		this.map = map;
 		this.x = entryW;

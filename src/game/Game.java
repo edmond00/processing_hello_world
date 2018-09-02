@@ -12,14 +12,15 @@ public class Game extends PApplet implements AppInterface {
 
 		int x = 180;
 		int y = 180;
+		public boolean end = false;
 		public boolean glitch = false;
-		public boolean sglitch = false;
+		public String ambiance = "cold";
 		Keyboard keyboard;
 		Minim minim;
 		public SoundBank sound;
 		ImageBank img;
 		AnimBank anim;
-		public Maze maze;
+		public Maze maze = null;
 		public Editor editor;
 		String music;
 		String rmusic;
@@ -79,7 +80,10 @@ public class Game extends PApplet implements AppInterface {
 		}
 
 		public void newMaze(String story) {
-			maze = new Maze();
+			if (maze == null)
+				maze = new Maze();
+			else
+				maze = new Maze(maze.narration);
 			maze.start(story);
 		}
 
@@ -114,6 +118,14 @@ public class Game extends PApplet implements AppInterface {
 			controlMaze();
 			maze.update(step);
 			Drawer.drawStory(Maze.self.story);
+			if (end) {
+				Drawer.useColor(textColor);
+				textSize(60);
+				text("THE END", width/2, height/8);
+				textSize(40);
+				text("press space to quit", width/2, height/8 + 60);
+				return ;
+			}
 			iso.draw();
 			String action = iso.getAction();
 			if (action != null) {
@@ -142,8 +154,6 @@ public class Game extends PApplet implements AppInterface {
 			int b = abs(12 - step % 25);
 			tint(240+Rand.rand(15),230+Rand.rand(25),240+Rand.rand(15),255);
 			if (Rand.rand(9) == 0) {
-				if (Rand.rand(9) == 0)
-					sglitch = false;
 				glitch = false;
 			}
 			if (glitch) {
@@ -151,15 +161,44 @@ public class Game extends PApplet implements AppInterface {
 				g = Rand.rand(20);
 				b = Rand.rand(80);
 				tint(Rand.rand(255),Rand.rand(255),Rand.rand(255),Rand.rand(255));
-			} else if (sglitch) {
-				r = Rand.rand(20);
+			} else if (ambiance.equals("warm")) {
+				r = 10 +Rand.rand(5);
 				g = Rand.rand(5);
-				b = Rand.rand(30);
-				tint(255,100,100+Rand.rand(155),255);
-			}
-			if (Rand.rand(150) == 0) {
-				sglitch = true;
-				sound.play("glitch");
+				b = Rand.rand(5);
+				tint(
+					255,
+					150+Rand.rand(20),
+					150+Rand.rand(10),
+					255);
+			} else if (ambiance.equals("cold")) {
+				r = Rand.rand(5);
+				g = Rand.rand(5);
+				b = 10 + Rand.rand(5);
+				tint(
+					150+Rand.rand(25),
+					200+Rand.rand(25),
+					255,
+					255);
+			} else if (ambiance.equals("gloomy")) {
+				r = Rand.rand(10);
+				g = Rand.rand(5);
+				b = Rand.rand(10);
+				tint(
+					200+Rand.rand(25),
+					150+Rand.rand(25),
+					180+Rand.rand(25)
+					,150
+				);
+			} else if (ambiance.equals("dark")) {
+				r = Rand.rand(5);
+				g = Rand.rand(5);
+				b = Rand.rand(5);
+				tint(
+					80+Rand.rand(25),
+					80+Rand.rand(25)
+					,80+Rand.rand(25),
+					255
+				);
 			}
 			background(r,g,b);
 		}
@@ -204,12 +243,21 @@ public class Game extends PApplet implements AppInterface {
 				editor.selection -= 1;
 			if (keyboard.isPress(DOWN))
 				editor.selection += 1;
-			if (keyboard.isPress((int)' ')) {
+			if (keyboard.isPress((int)' ') || keyboard.isPress((int)'\n')) {
 				editor.press();
 			}
 		}
 
+		void controlEnd() {
+			if (keyboard.isPress((int)' ') || keyboard.isPress((int)'\n')) {
+				exit();
+			}
+		}
 		void controlMaze() {
+			if (end) {
+				controlEnd();
+				return;
+			}
 			if (keyboard.isPressed(LEFT))
 				iso.left();
 			if (keyboard.isPressed(RIGHT))
@@ -218,7 +266,7 @@ public class Game extends PApplet implements AppInterface {
 				iso.up();
 			if (keyboard.isPressed(DOWN))
 				iso.down();
-			if (keyboard.isPress((int)' ')) {
+			if (keyboard.isPress((int)' ') || keyboard.isPress((int)'\n')) {
 				if (alerting != null) {
 					alerting = null;
 				} else {
@@ -226,6 +274,10 @@ public class Game extends PApplet implements AppInterface {
 					maze.tell(iso.getNarration());
 				}
 			}
+			if (keyboard.isPress((int)'c'))
+				this.maze.narration.context.printHistory();
+			if (keyboard.isPress((int)'g'))
+				this.maze.narration.global.printHistory();
 		}
 
 		public void newWordsAlert(String words) {

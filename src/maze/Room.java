@@ -2,6 +2,7 @@ package maze;
 
 import tools.*;
 import iso.*;
+import game.*;
 
 public class Room {
 	
@@ -17,6 +18,7 @@ public class Room {
 	int floorHeight;
 	int wallHeightMin;
 	int wallHeightMax;
+	String ambiance = "cold";
 
 	public Room(Room backRoom) {
 		this.backRoom = backRoom;
@@ -71,6 +73,10 @@ public class Room {
 
 	void use(int pw, int pd) {
 		IsoEngine.self.useMap(map, pw, pd);
+		Game.app.sound.play("changeRoom");
+		Game.app.glitch = true;
+		Game.app.ambiance = ambiance;
+		Maze.self.fastUpdate();
 		Maze.self.actualRoom = this;
 	}
 	
@@ -129,6 +135,16 @@ public class Room {
 		int w = 2 + Rand.rand(map.width-2);
 		int d = 2 + Rand.rand(map.depth-4);
 		new Queen(map, w, d, color);
+	}
+	void putClock() {
+		int w = 2 + Rand.rand(map.width-2);
+		int d = 2 + Rand.rand(map.depth-4);
+		new Clock(map, w, d);
+	}
+	void putHatter() {
+		int w = 2 + Rand.rand(map.width-2);
+		int d = 2 + Rand.rand(map.depth-4);
+		new Hatter(map, w, d);
 	}
 
 	void putCornerJournal() {

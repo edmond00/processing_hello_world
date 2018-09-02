@@ -16,12 +16,14 @@ public class AnimBank {
 		add("doorLeft", 24, 3, 22);
 		add("doorRight", 24, 3, 22);
 		add("cat", 21, 9, 10);
-		add("crow", 22, 10, 15);
+		add("crow", 22, 12, 17);
 		add("rabbit", 17, 8, 14);
 		add("heartQueen", 22, 7, 20);
 		add("spadeQueen", 22, 7, 20);
 		add("clubQueen", 22, 7, 20);
 		add("diamondQueen", 22, 7, 20);
+		add("clock", 25, 5, 23);
+		add("hatter", 24, 5, 22);
 	}
 
 	void add(String img, int oneStepHeight, int centerX, int centerY) {
