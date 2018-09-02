@@ -42,11 +42,11 @@ public class Editor extends Drawer {
 
 		addChoiceRegex("ambiance", "(cold|warm|dark|gloomy)");
 		//DEBUG
-		addChoice("clock", "to 3 o`clock");
-		addChoice("clock", "to 2 o`clock");
-		addChoice("clock", "to 5 o`clock");
-		addChoice("clock", "to 7 o`clock");
-		addChoice("clock", "to 9 o`clock");
+		//addChoice("clock", "to 3 o`clock");
+		//addChoice("clock", "to 2 o`clock");
+		//addChoice("clock", "to 5 o`clock");
+		//addChoice("clock", "to 7 o`clock");
+		//addChoice("clock", "to 9 o`clock");
 		//addChoice("object", "a hatter");
 		//addChoice("end", "in her bed");
 

@@ -237,7 +237,7 @@ public class Maze {
 		
 		Conceptualise.entity("NOEXIT").asBagOfWords("no exit", "no door", "no way to continue");
 		Conceptualise.entity("LEFTRIGHT").asBagOfWords("on her left #addLeftDoor", "on her right #addRightDoor").startingWith(0,0);
-		Conceptualise.entity("ONETWO").asBagOfWords("@NOEXIT", "one door @LEFTRIGHT", "two doors #addBothDoor").startingWith(2,2,2,2,2);//(1,1,0,2);//startingWith
+		Conceptualise.entity("ONETWO").asBagOfWords("@NOEXIT", "one door @LEFTRIGHT", "two doors #addBothDoor").startingWith(1,1,0,2);//(2,2,2,2,2);//startingWith
 		Conceptualise.entity("JOURNAL").asBagOfWords("her @DREAM journal", "her @DREAM diary");
 		Conceptualise.entity("DREAM").asBagOfWords("dream", "nightmare");
 
@@ -251,7 +251,7 @@ public class Maze {
 		Conceptualise.entity("QBOX").asBagOfWords("mysterious", "wooden", "beautiful", "big");
 
 		Conceptualise.entity("OBJECT")
-			.asBagOfWords("there was @JOURNAL #putJournal", "there was @BOX #putBox", "there was @ANIMAL", "there was @QUEEN with @CLOTHE", "there was @PENDULUM #putClock").startingWith(0,4,3)//.startingWith(1,0,1,2)//
+			.asBagOfWords("there was @JOURNAL #putJournal", "there was @BOX #putBox", "there was @ANIMAL", "there was @QUEEN with @CLOTHE", "there was @PENDULUM #putClock").startingWith(1,0,1,2)//.startingWith(0,4,3)//
 			.asText("there was @HATTER #putHatter");
 
 
@@ -265,15 +265,15 @@ public class Maze {
 			.asText("and with the journal").when("JOURNAL").exists();
 
 		Conceptualise.entity("OLDROOM")
-		.asText("again, @SHE was in the room with two doors @WITHOLD").when("ONETWO").contains("two")
-		.asText("again, @SHE was in the room with one door @WITHOLD").when("ONETWO").contains("one")
-		.asText("again, @SHE was in the room with @NOEXIT @WITHOLD").when("ONETWO").contains("NOEXIT");
+		.asText("again, @SHE was in the room with two doors").when("ONETWO").contains("two")
+		.asText("again, @SHE was in the room with one door").when("ONETWO").contains("one")
+		.asText("again, @SHE was in the room with @NOEXIT").when("ONETWO").contains("NOEXIT");
 		Conceptualise.entity("DESCRIPTION")
 		.asText("@OLDROOM").when("ONETWO").exists()
 		.asText("@NEWROOM").when("ONETWO").doesNotExist();
 
 		Conceptualise.entity("WAKEUP").asText("@SHE woke up in a strange maze");
-		Conceptualise.entity("ROOMMIDDLE").asBagOfWords("the room was empty", "in the middle of the room, @OBJECT", "inside the room, @OBJECT", "in the room, @OBJECT", " inside it, @OBJECT", "@OBJECT in this room").startingWith(1,1,1,1,1,1);//(0,2,1);
+		Conceptualise.entity("ROOMMIDDLE").asBagOfWords("the room was empty", "in the middle of the room, @OBJECT", "inside the room, @OBJECT", "in the room, @OBJECT", " inside it, @OBJECT", "@OBJECT in this room").startingWith(0,2,1);//(1,1,1,1,1,1);//
 		Conceptualise.entity("FIRSTJOURNAL").asText("there was @JOURNAL in the corner of the room #putCornerJournal");
 		Conceptualise.entity("MIND").asText("@SHE wanted to @ACTION");
 
