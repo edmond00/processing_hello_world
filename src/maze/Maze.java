@@ -265,9 +265,9 @@ public class Maze {
 			.asText("and with the journal").when("JOURNAL").exists();
 
 		Conceptualise.entity("OLDROOM")
-		.asText("again, @SHE was in the room with two doors").when("ONETWO").contains("two")
-		.asText("again, @SHE was in the room with one door").when("ONETWO").contains("one")
-		.asText("again, @SHE was in the room with @NOEXIT").when("ONETWO").contains("NOEXIT");
+		.asText("again, @SHE was in the room with two doors @WITHOLD").when("ONETWO").contains("two")
+		.asText("again, @SHE was in the room with one door @WITHOLD").when("ONETWO").contains("one")
+		.asText("again, @SHE was in the room with @NOEXIT @WITHOLD").when("ONETWO").contains("NOEXIT");
 		Conceptualise.entity("DESCRIPTION")
 		.asText("@OLDROOM").when("ONETWO").exists()
 		.asText("@NEWROOM").when("ONETWO").doesNotExist();

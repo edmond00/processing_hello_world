@@ -14,6 +14,7 @@ public class Editor extends Drawer {
 	boolean pressed;
 	boolean deleting;
 	boolean rewriting;
+	boolean stopToPoint = false;;
 	int selection = 0;
 	String buffer;
 	String toReplace;
@@ -104,39 +105,44 @@ public class Editor extends Drawer {
 		story = story.substring(0, story.length()-1);
 	}
 
+	boolean stopPoint() {
+		if (stopToPoint == false)
+			return false;
+		return (story.charAt(story.length()-1) == '.');
+	}
 	void removeLetter(int timestep) {
 		canBeRewrite();
 		if (story.length() > 0 && story.charAt(story.length()-1) == '.') {
 			buffer = "";
 		}
 		if (story.length() <= 0 ||
-			story.charAt(story.length()-1) == '.' ||
+			stopPoint() ||
 			actualChoices.size() > 0) {
 			endDelete();
 			return;
 		}
-		if (timestep % 2 == 0)
+		if (timestep >= 0 && timestep % 2 == 0)
 			Game.app.sound.play("erase");
 		removeLastCharacter();
 	}
 
 	void replaceLetter(int timestep) {
 		if (toReplace.length() > 0) {
-			if (timestep % 2 == 0)
+			if (timestep >= 0 && timestep % 2 == 0)
 				Game.app.sound.play("erase");
 			story = story.substring(0, story.length()-1);
 			toReplace = toReplace.substring(0, toReplace.length()-1);
 			return;
 		}
 		if (toWrite.length() > 0) {
-			if (timestep % 2 == 0)
+			if (timestep >= 0 && timestep % 2 == 0)
 				Game.app.sound.play("write2");
 			story += toWrite.charAt(0);
 			toWrite = toWrite.substring(1, toWrite.length());
 			return;
 		}
 		if (buffer.length() > 0) {
-			if (timestep % 2 == 0)
+			if (timestep >= 0 && timestep % 2 == 0)
 				Game.app.sound.play("write2");
 			story += buffer.charAt(0);
 			buffer = buffer.substring(1, buffer.length());
@@ -153,11 +159,12 @@ public class Editor extends Drawer {
 		rewriting = true;
 	}
 
-	void startDelete() {
+	void startDelete(boolean stp) {
 		if (deleting == true || story.length() <= 0)
 			return;
 		removeLastCharacter();
 		deleting = true;
+		stopToPoint = stp;
 	}
 
 	void endDelete() {
@@ -170,6 +177,15 @@ public class Editor extends Drawer {
 				removeLetter(timestep);
 			if (rewriting)
 				replaceLetter(timestep);
+		}
+	}
+
+	void fastUpdate() {
+		while (rewriting == true || deleting == true) {
+			if (deleting)
+				removeLetter(-1);
+			if (rewriting)
+				replaceLetter(-1);
 		}
 	}
 
@@ -224,6 +240,15 @@ public class Editor extends Drawer {
 
 		int n = 0;
 
+		if (rewriting || deleting) {
+			if (this.pressed == true) {
+				this.pressed = false;
+				this.fastUpdate();
+			}
+			printOption("press space to skip the animation", -1);
+			return ;
+		}
+
 			
 		int c = 0;
 		for (String choice : actualChoices) {
@@ -233,9 +258,16 @@ public class Editor extends Drawer {
 			c += 1;
 		}
 
+
 		if (story.length() > 0) {
 			if (isSelected(n))
-				this.startDelete();
+				this.startDelete(false);
+			n = printOption("erase until a possibility to rewrite", n);
+		}
+
+		if (story.length() > 0) {
+			if (isSelected(n))
+				this.startDelete(true);
 			n = printOption("erase the last sentence", n);
 		}
 	
