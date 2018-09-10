@@ -157,12 +157,38 @@ public class Maze {
 			.asText("at 2 o`clock").when("QUEEN").contains("diamond")
 			.asText("at 7 o`clock").when("QUEEN").contains("club");
 
+		Conceptualise.entity("STILLCLOCK")
+			.asText("it was still 2 o`clock").when("TOOCLOCK").contains("2").globally()
+			.asText("it was still 5 o`clock").when("TOOCLOCK").contains("5").globally()
+			.asText("it was still 7 o`clock").when("TOOCLOCK").contains("7").globally()
+			.asText("it was still 9 o`clock").when("TOOCLOCK").contains("9").globally()
+			.asText("it was still 3 o`clock").when("TOOCLOCK").contains("3").globally()
+			.asText("it was still 12 o`clock");
+
 		Conceptualise.entity("TOOCLOCK")
-			.asBagOfWords("to 2 o`clock","to 5 o`clock", "to 7 o`clock","to 9 o`clock","to 3 o`clock");
+			.asBagOfWords("it was 2 o`clock","it was 5 o`clock", "it was 7 o`clock","it was 9 o`clock","it was 3 o`clock");
+		Conceptualise.entity("WATCHTIME")
+			.asBagOfWords(
+				"@SHE looked the clock to check the time",
+				"@SHE watched the clock to check the time",
+				"@SHE looked the time on the clock",
+				"@SHE watched the time on the clock",
+				"@SHE checked the time on the clock"
+			);
+		Conceptualise.entity("WATCHTIMEAGAIN")
+			.asBagOfWords(
+				"@SHE looked the time again",
+				"@SHE watched the time again",
+				"@SHE checked the time again",
+				"@SHE looked the clock again",
+				"@SHE watched the clock again",
+				"@SHE checked the clock again"
+			);
 		Conceptualise.entity("BADSET")
-			.asText("@SHE set the clock to 12 o`clock #clockSound");
+			.asText("@WATCHTIME, it was 12 o`clock #clockSound").when("BADSET").doesNotExist().globally().and("GOODSET").doesNotExist().globally()
+			.asText("@WATCHTIMEAGAIN, @STILLCLOCK #clockSound");
 		Conceptualise.entity("GOODSET")
-			.asText("@SHE set the clock @TOOCLOCK #clockSound");
+			.asText("@WATCHTIME, @TOOCLOCK #clockSound");
 
 		Conceptualise.entity("QUEENSPEAK")
 			.asText("@ALREADYSPEAK #feedSound").when("HELPSPEAK").exists()
@@ -262,6 +288,8 @@ public class Maze {
 			.asText("and with the queen").when("QUEEN").exists()
 			.asText("and with the clock").when("PENDULUM").exists()
 			.asText("and with the box").when("BOX").exists()
+			.asText("and with the box").when("BOX").exists()
+			.asText("and with the hatter").when("HATTER").exists()
 			.asText("and with the journal").when("JOURNAL").exists();
 
 		Conceptualise.entity("OLDROOM")
@@ -311,10 +339,10 @@ public class Maze {
 			"'DARK' #newEdit?ambiance&EASYEDIT"
 		);
 		Conceptualise.entity("MEDIUMEDIT").asLoop(
-			"'TO 2 O`CLOCK' #newEdit?clock&MEDIUMEDIT",
-			"'TO 5 O`CLOCK' #newEdit?clock&MEDIUMEDIT",
-			"'TO 7 O`CLOCK' #newEdit?clock&MEDIUMEDIT",
-			"'TO 9 O`CLOCK' #newEdit?clock&MEDIUMEDIT",
+			"'IT WAS 2 O`CLOCK' #newEdit?clock&MEDIUMEDIT",
+			"'IT WAS 5 O`CLOCK' #newEdit?clock&MEDIUMEDIT",
+			"'IT WAS 7 O`CLOCK' #newEdit?clock&MEDIUMEDIT",
+			"'IT WAS 9 O`CLOCK' #newEdit?clock&MEDIUMEDIT",
 			"'A BOX' #newEdit?object&MEDIUMEDIT",
 			"'THE QUEEN OF HEART' #newEdit?object&MEDIUMEDIT",
 			"'THE QUEEN OF SPADE' #newEdit?object&MEDIUMEDIT",
@@ -324,7 +352,7 @@ public class Maze {
 		);
 		Conceptualise.entity("HARDEDIT").asLoop(
 			"'A HATTER' #newEdit?object&HARDEDIT",
-			"'TO 3 O`CLOCK' #newEdit?clock&HARDEDIT"
+			"'IT WAS 3 O`CLOCK' #newEdit?clock&HARDEDIT"
 		);
 		Conceptualise.entity("ENDEDIT").asText(
 			"'IN HER BED' #newEdit?end&ENDEDIT"

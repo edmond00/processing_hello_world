@@ -38,7 +38,7 @@ public class Editor extends Drawer {
 		addChoiceRegex("door", "(a room with one door on her (left|right)|a room with (two doors|no door|no exit|no way to continue))");
 		addChoiceRegex("food", "(a cup of milk|a piece of lemon|some worms|a carrot)");
 		addChoiceRegex("object", "(a ((smilling|clever|hungry|lonely|happy|smart|playful|greedy) )?(cat|crow|rabbit)|the queen of (heart|spade|diamond|clubs)|a ((wooden|big|beautiful|mysterious) )?(pendulum )?(clock|box|chest)|a ((mad|crazy|moody|demented|insane) )? hatter)");
-		addChoiceRegex("clock", "(to [0-9]+ o`clock)");
+		addChoiceRegex("clock", "(it was [0-9]+ o`clock)");
 		addChoiceRegex("end", "(in a strange maze|in her bed)");
 
 		addChoiceRegex("ambiance", "(cold|warm|dark|gloomy)");
@@ -96,6 +96,7 @@ public class Editor extends Drawer {
 	void editStory(String story) {
 		Game.app.sound.play("openJournal");
 		Game.app.rmusic();
+		actualChoices.clear();
 		editing = true;
 		this.story = story.trim();
 	}
@@ -232,6 +233,7 @@ public class Editor extends Drawer {
 		Game.app.newMaze(story);
 		Game.app.music();
 		this.editing = false;
+		actualChoices.clear();
 		Game.app.maze.rewriteFlag = false;
 	}
 

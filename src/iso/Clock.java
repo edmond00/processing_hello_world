@@ -4,7 +4,7 @@ public class Clock extends IsoObject {
 
 	public Clock(IsoMap map, int x, int y) {
 		super(map, x, y);
-		action = new Action("set to 12 o'clock", "@BADSET");
+		action = new Action("look what time is it", "@BADSET");
 	}
 
 	void draw(int centerTileX, int centerTileY) {
